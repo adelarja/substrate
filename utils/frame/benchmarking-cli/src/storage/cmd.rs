@@ -116,6 +116,10 @@ pub struct StorageParams {
 	/// Include child trees in benchmark.
 	#[arg(long)]
 	pub include_child_trees: bool,
+
+	/// Access only a percentage of KV pairs.
+	#[arg(long)]
+	pub db_fraction: u8,
 }
 
 impl StorageCmd {
