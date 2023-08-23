@@ -119,7 +119,7 @@ pub struct StorageParams {
 
 	/// Access only a percentage of KV pairs.
 	#[arg(long)]
-	pub db_fraction: u8,
+	pub db_fraction: usize,
 }
 
 impl StorageCmd {
