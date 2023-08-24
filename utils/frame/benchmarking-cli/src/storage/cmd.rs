@@ -118,7 +118,7 @@ pub struct StorageParams {
 	pub include_child_trees: bool,
 
 	/// Access only a percentage of KV pairs.
-	#[arg(long)]
+	#[arg(long, default_value_t = 100)]
 	pub db_fraction: usize,
 }
 
