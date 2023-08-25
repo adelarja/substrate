@@ -66,12 +66,17 @@ impl StorageCmd {
 		kvs.shuffle(&mut rng);
 		info!("Writing {} keys", kvs.len());
 
+		let key_limit = (kvs.len() * self.params.db_fraction) / 100;
+
 		let mut child_nodes = Vec::new();
 
 		// Generate all random values first; Make sure there are no collisions with existing
 		// db entries, so we can rollback all additions without corrupting existing entries.
-		for key_value in kvs {
-			let (k, original_v) = key_value?;
+		for (key_index, key_value) in kvs.as_slice().iter().enumerate() {
+			if key_index == key_limit {
+				break;
+			}
+			let (k, original_v) = (key_value.clone())?;
 			match (self.params.include_child_trees, self.is_child_key(k.to_vec())) {
 				(true, Some(info)) => {
 					let child_keys =

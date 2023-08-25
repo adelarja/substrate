@@ -45,11 +45,16 @@ impl StorageCmd {
 		let (mut rng, _) = new_rng(None);
 		keys.shuffle(&mut rng);
 
+		let key_limit = (keys.len() * self.params.db_fraction) / 100;
+
 		let mut child_nodes = Vec::new();
 		// Interesting part here:
 		// Read all the keys in the database and measure the time it takes to access each.
-		info!("Reading {} keys", keys.len());
-		for key in keys.as_slice() {
+		info!("Reading {} keys of {} keys", key_limit, keys.len());
+		for (key_index, key) in keys.as_slice().iter().enumerate() {
+			if key_index == key_limit {
+				break;
+			}
 			match (self.params.include_child_trees, self.is_child_key(key.clone().0)) {
 				(true, Some(info)) => {
 					// child tree key
